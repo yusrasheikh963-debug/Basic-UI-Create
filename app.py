@@ -2,11 +2,12 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load model
+# Load saved files
 model = joblib.load("LR_ford_car.pkl")
 scaler = joblib.load("scaler.pkl")
 encoded_columns = joblib.load("columns.pkl")
 
+#app title
 st.set_page_config(
     page_title="Ford Car Price Predictor",
     layout="centered"
@@ -15,6 +16,7 @@ st.set_page_config(
 st.title("Ford Car Price Predictor")
 st.write("Enter the car details below to predict its selling price.")
 
+#User inputs
 year = st.number_input(
     "Manufacturing Year", 
     min_value=2000, 
@@ -71,6 +73,7 @@ fuel_type = st.selectbox(
 
 car_model = st.text_input("Enter Car Model Name...")
 
+#prediction
 if st.button("Predict Price"):
 
     input_data = pd.DataFrame({
@@ -84,8 +87,10 @@ if st.button("Predict Price"):
         "engineSize": [engine]
     })
 
+# One-Hot encoding
     input_data = pd.get_dummies(input_data)
 
+#Match training columns
     input_data = input_data.reindex(
         columns=encoded_columns,
         fill_value=0
